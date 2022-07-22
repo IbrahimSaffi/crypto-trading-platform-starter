@@ -15,17 +15,14 @@ const DOGE = "dogecoin"
 const COINS = [BTC, ETH, DOGE]
 
 const ACTION = {
-    TOGGLE_FETCH: "toggle-fetch",
     UPDATE_COINS: "update-coins"
 }
 
 function reducer(state, action) {
     switch (action.type) {
-        case ACTION.TOGGLE_FETCH:
-            return {...state, isFetching: !state.isFetching}
         case ACTION.UPDATE_COINS:
             let {coins} = action.payload
-            return {...state, coins: coins}
+            return {...state, coins: coins, isFetching: false}
     }
 }
 
@@ -43,25 +40,23 @@ function App() {
     let [state, dispatch] = useReducer(reducer, initialState)
 
     async function getCoinData(){
+        console.log("getCoinData")
         let response = await CoinGeckoClient.coins.all()
         
         let coins = response.data.filter((coin) => COINS.indexOf(coin.id) >= 0)
 
         dispatch({type: ACTION.UPDATE_COINS, payload: {coins}})
-
-        if (state.isFetching){
-            dispatch({type: ACTION.TOGGLE_FETCH})
-        }
     }
 
     useEffect(() => {
+        getCoinData()
         intervalId.current = setInterval(getCoinData, 5000)
     }, [])
 
     return (
         <div className="app" style={{backgroundImage: "url('./images/bg.svg')"}}>
             <div className='main-container' >
-                <BuySell />
+                {/* <BuySell /> */}
                 <DrescriptionContainer />
 
                 {
