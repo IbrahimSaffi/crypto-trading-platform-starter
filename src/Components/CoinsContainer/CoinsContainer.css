@@ -9,9 +9,18 @@
 .coin-card {
     display: flex;
     width: 33%;
-   height: 10vh;
+   height: 17vh;
+   align-items: center;
+   padding: 5px;
    /* border: 1px solid gray; */
    border-radius: 10px;
    box-shadow: -2px 1px 10px 1px gray;
    margin-top: 20px;
+}
+.coin-card img {
+    height: 90%;
+    margin-right: 3px;
+}
+.coin-card-text {
+    height: fit-content;
 }

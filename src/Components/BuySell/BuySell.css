@@ -4,5 +4,52 @@
     left: 40vw;
     display: flex;
     flex-direction: column;
-    display: none;
+    /* display: none; */
+    background-color: red;
+    min-width: 30%;
+    border-radius: 10px;
+}
+
+.buy-sell-label {
+    background-color: black;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px ;
+}
+.sub-container {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.input-capacity {
+    display: flex;
+    justify-content: space-between;
+   margin-top: 10px; 
+}
+input {
+    border-radius: 5px;
+     background-color: transparent;
+}
+
+.buy-input,.sell-input {
+    display: flex;
+    gap: 10px;
+}
+.buy-btn {
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    background-color: gray;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.rem {
+    background-color: transparent;
+    color: white;
+    border: none;
 }
