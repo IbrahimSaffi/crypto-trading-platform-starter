@@ -1,0 +1,23 @@
+.description-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+p{
+ margin-bottom: none;
+}
+.main-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.food {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+}
+.food img {
+    height: 100%;
+}
