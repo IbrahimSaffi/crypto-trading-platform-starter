@@ -10,23 +10,6 @@
 
 .coin-card {
     display: flex;
-<<<<<<< HEAD
-    width: 33%;
-   height: 17vh;
-   align-items: center;
-   padding: 5px;
-   /* border: 1px solid gray; */
-   border-radius: 10px;
-   box-shadow: -2px 1px 10px 1px gray;
-   margin-top: 20px;
-}
-.coin-card img {
-    height: 90%;
-    margin-right: 3px;
-}
-.coin-card-text {
-    height: fit-content;
-=======
     flex: 1;
     padding: 16px;
     border-radius: 10px;
@@ -52,5 +35,4 @@
 
 .down {
     color: #f44646;
->>>>>>> 7e1c5b9f834338120be8c421a6ae54035b4d544a
 }
