@@ -4,8 +4,8 @@
     left: 40vw;
     display: flex;
     flex-direction: column;
-    /* display: none; */
-    background-color: red;
+    background-color: white;
+    box-shadow: 1px 1px 10px 1px grey;
     min-width: 30%;
     border-radius: 10px;
 }
