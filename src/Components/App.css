@@ -43,3 +43,9 @@
 .transactions-list{
   margin: 16px 0px;
 }
+
+.fetching {
+  text-align: center;
+  font-size: 24px;
+  font-family: "Poppins";
+}
