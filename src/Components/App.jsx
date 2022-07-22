@@ -1,12 +1,17 @@
 import './App.css';
+import DrescriptionContainer from './DescriptionContainer/DrescriptionContainer';
+import CoinsContainer from './CoinsContainer/CoinsContainer';
+import BuySell from './BuySell/BuySell';
 import HoldingCard from './HoldingCard/HoldingCard';
 import TransactionCard from './TransactionCard/TransactionCard';
 
 function App() {
     return (
         <div className="app">
-            <div className='top-text-container' ></div>
-            <div className='coins-container'></div>
+            <BuySell/>
+            <DrescriptionContainer/>
+            <CoinsContainer/>
+            
             <div className='holdings-transactions'>
                 <div className="holdings">
                     <h2>Current Holdings</h2>
