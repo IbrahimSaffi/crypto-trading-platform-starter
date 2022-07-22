@@ -1,0 +1,41 @@
+.holding-card {
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.holding-card h3 {
+    color: #464646;
+}
+
+.details {
+    color: #5c5c5c;
+    font-weight: bold;
+}
+
+.change {
+    font-weight: bold;
+}
+
+.neutral {
+    color: #5c5c5c;
+}
+
+.up {
+    color: #34aa33;
+}
+
+.up::after {
+    content: "▲";
+}
+
+.down {
+    color: #f44646; 
+}
+
+.down::after {
+    content: "▼";
+}

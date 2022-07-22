@@ -1,0 +1,33 @@
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.holdings-transactions {
+  display: flex;
+  width: 1000px;
+  gap: 32px;
+}
+
+.holdings {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-family: "Poppins";
+}
+
+.transactions {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-family: "Poppins";
+}
+
+.holdings-list {
+  margin: 16px 0px;
+}
+
+.transactions-list{
+  margin: 16px 0px;
+}
