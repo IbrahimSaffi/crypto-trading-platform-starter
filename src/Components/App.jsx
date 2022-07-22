@@ -8,6 +8,7 @@ import TransactionCard from './TransactionCard/TransactionCard';
 function App() {
     return (
         <div className="app">
+           <div className='main-container' >
             <BuySell/>
             <DrescriptionContainer/>
             <CoinsContainer/>
@@ -29,6 +30,7 @@ function App() {
                     </div>
                 </div>
             </div>
+            </div>  
         </div>
     );
 }
