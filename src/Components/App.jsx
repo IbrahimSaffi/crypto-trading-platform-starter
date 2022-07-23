@@ -17,7 +17,12 @@ const COINS = [BTC, ETH, DOGE]
 
 const ACTION = {
     UPDATE_COINS: "update-coins",
-    TOGGLE_THEME: "toggle-theme"
+    TOGGLE_THEME: "toggle-theme",
+    CHANGE_BRIGHTNESS: "brightness-display",
+    TRANSACTION_TYPE: "transaction-type",
+    COIN_TYPE: "coin-type",
+    INPUT_VALUE: "input-value-record",
+    TRANSACTION: "transaction",
 }
 
 function reducer(state, action) {
@@ -26,7 +31,74 @@ function reducer(state, action) {
             let { coins } = action.payload
             return { ...state, coins: coins, isFetching: false }
         case ACTION.TOGGLE_THEME:
-            return { ...state, isDarkTheme: !state.isDarkTheme}
+            return { ...state, isDarkTheme: !state.isDarkTheme }
+        case ACTION.CHANGE_BRIGHTNESS:
+            let newBrightness;
+            let newDisplay;
+            if (state.dialogBrightness === "brightness(100%)") {
+                newBrightness = "brightness(50%)"
+                newDisplay = "flex"
+            }
+            else {
+                newBrightness = "brightness(100%)"
+                newDisplay = "none"
+            }
+            return { ...state, dialogBrightness: newBrightness, dialogDisplay: newDisplay }
+        case ACTION.TRANSACTION_TYPE:
+            let newTransactionType
+            if (action.payload === "buy") {
+                newTransactionType = "buy"
+            }
+            else {
+                newTransactionType = "sell"
+            }
+            return { ...state, transactionType: newTransactionType }
+        case ACTION.COIN_TYPE:
+            return { ...state, coinType: action.payload.name, currentPrice: action.payload.price }
+        case ACTION.INPUT_VALUE:
+            return { ...state, inputValue: action.payload }
+        case ACTION.TRANSACTION:
+            let currDateAndTime = action.payload
+            let coinToBeBought = state.coinType
+            let amountOfCoinsToBeBought = Number(state.inputValue)
+            let priceAtTransactionTime = state.currentPrice
+            let typeOfTransaction = state.transactionType
+            let dollarsToBePaid = amountOfCoinsToBeBought * priceAtTransactionTime
+            //To update transactions
+            let tempTransactionArr = state.transactions.slice()
+            let newTransaction = {
+                name: coinToBeBought,
+                coinsAmount: amountOfCoinsToBeBought,
+                price: priceAtTransactionTime,
+                type: typeOfTransaction,
+                dollarsAmount: dollarsToBePaid,
+                time: currDateAndTime
+            }
+            tempTransactionArr.push(newTransaction)
+            //To update holdings
+            let tempHoldingObject = { ...state.holdings }
+            if (!tempHoldingObject.hasOwnProperty(`${coinToBeBought}`)) {
+                tempHoldingObject[`${coinToBeBought}`] = {
+                    name: coinToBeBought,
+                    coinsInHolding: amountOfCoinsToBeBought,
+                    dollarsPaid: dollarsToBePaid,
+                }
+            }
+            else {
+                let tempDollarPaid;
+                let tempCoinInHolding;
+                if (typeOfTransaction === "buy") {
+                    tempDollarPaid = tempHoldingObject[`${coinToBeBought}`].dollarsPaid + dollarsToBePaid
+                    tempCoinInHolding = tempHoldingObject[`${coinToBeBought}`].coinsInHolding + amountOfCoinsToBeBought
+                }
+                else {
+                    tempDollarPaid = tempHoldingObject[`${coinToBeBought}`].dollarsPaid - dollarsToBePaid
+                    tempCoinInHolding = tempHoldingObject[`${coinToBeBought}`].coinsInHolding - amountOfCoinsToBeBought
+                }
+                tempHoldingObject[`${coinToBeBought}`].dollarsPaid = tempDollarPaid
+                tempHoldingObject[`${coinToBeBought}`].coinsInHolding = tempCoinInHolding
+            }
+            return { ...state, transactions: tempTransactionArr, holdings: tempHoldingObject }
         default:
             return state
     }
@@ -36,10 +108,15 @@ const initialState = {
     isDarkTheme: false,
     isFetching: true,
     walletBalance: 1000,
-    portfolioValue: 0,
     coins: [],
-    holdings: [1],
-    transactions: [1]
+    holdings: {},
+    transactions: [],
+    dialogBrightness: "brightness(100%)",
+    dialogDisplay: "none",
+    transactionType: "buy",
+    coinType: null,
+    currentPrice: null,
+    inputValue: null
 }
 
 function App() {
@@ -63,44 +140,56 @@ function App() {
 
     let theme = state.isDarkTheme ? "app dark" : "app"
     let bgImage = state.isDarkTheme ? "url('./images/bg-dark.svg')" : "url('./images/bg-light.svg')"
+    
     return (
-        <div className={theme} style={{ backgroundImage: bgImage }}>
-            <ThemeSwitch isDark={state.isDarkTheme} dispatch={dispatch} />
+        <div>
+        <BuySell state={state} dispatch = {dispatch} />
+
+        <div className="app" style={{backgroundImage: "url('./images/bg.svg')"  ,filter:`${state.dialogBrightness}`}}>
             <div className='main-container' >
-                {/* <BuySell /> */}
-                <DrescriptionContainer portfolioValue={state.portfolioValue} walletBalance={state.walletBalance} />
+                <DrescriptionContainer state={state} />
 
                 {
                     state.isFetching
-                        ? <p className="fetching">Fetching...</p>
-                        : <>
-                            <CoinsContainer coinList={state.coins} />
+                    ? <p className="fetching">Fetching...</p>
+                    : <>
+                        <CoinsContainer dispatch={dispatch} coinList={state.coins}/>
 
-                            <div className='holdings-transactions'>
-                                <div className="holdings">
-                                    <h2>Current Holdings</h2>
-                                    {
-                                        state.holdings.length === 0
-                                            ? <p>Go buy some</p>
-                                            : <div className="holdings-list">
-                                                <HoldingCard />
-                                            </div>
-                                    }
-                                </div>
-                                <div className="transactions">
-                                    <h2>Transactions</h2>
-                                    {
-                                        state.transactions.length === 0
-                                            ? <p>No transactions yet...</p>
-                                            : <div className="holdings-list">
-                                                <TransactionCard />
-                                            </div>
-                                    }
-                                </div>
+                        <div className='holdings-transactions'>
+                            <div className="holdings">
+                                <h2>Current Holdings</h2>
+                                {
+                                    Object.keys(state.holdings).length === 0
+                                    ? <p>Go buy some</p>
+                                    : <div className="holdings-list">
+                                        {Object.keys(state.holdings).map(ele=>{
+                                           return  <HoldingCard 
+                                             updatePortfolio={dispatch}
+                                             coinsData={state.coins}
+                                             holdingData={state.holdings[ele]} 
+                                             />                                           
+                                        })}
+                                        </div>
+                                }
                             </div>
-                        </>
+                            <div className="transactions">
+                                <h2>Transactions</h2>
+                                {
+                                    state.transactions.length === 0
+                                    ? <p>No transactions yet...</p>
+                                    : <div className="holdings-list">
+                                        {state.transactions.map(ele=>{
+                                          return  <TransactionCard transactionData={ele} />
+
+                                        })}
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </>
                 }
             </div>
+        </div>
         </div>
     );
 }

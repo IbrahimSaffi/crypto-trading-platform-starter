@@ -1,11 +1,11 @@
 import "./TransactionCard.css"
 
-export default function TransactionCard({currencyName, currencyAmount, buyPrice, paidPrice, date}){
-
-    
+export default function TransactionCard(props){
+    let currCardData = props.transactionData 
+    console.log(props.transactionData)
     return <div className="transaction-card sell">
-        <h3>Dogecoin - 50 @ $0.51234</h3>
-        <p className="details">Paid: $25.00</p>
-        <p className="date">Bought on 14/05/2021, 10:40:43</p>
+        <h3>{currCardData.name} - {currCardData.coinsAmount} @ ${currCardData.price}</h3>
+        <p className="details">{currCardData.type==="buy"?"Paid":"Got"}: ${currCardData.dollarsAmount}</p>
+        <p className="date">Bought on {currCardData.time}</p>
     </div>
 }
