@@ -105,7 +105,7 @@ function reducer(state, action) {
 }
 
 const initialState = {
-    isDarkTheme: false,
+    isDarkTheme: true,
     isFetching: true,
     walletBalance: 1000,
     coins: [],
@@ -143,9 +143,10 @@ function App() {
     
     return (
         <div>
+        <ThemeSwitch isDark={state.isDarkTheme} dispatch={dispatch}/>
         <BuySell state={state} dispatch = {dispatch} />
 
-        <div className="app" style={{backgroundImage: "url('./images/bg.svg')"  ,filter:`${state.dialogBrightness}`}}>
+        <div className={theme} style={{backgroundImage: bgImage, filter:`${state.dialogBrightness}`}}>
             <div className='main-container' >
                 <DrescriptionContainer state={state} />
 

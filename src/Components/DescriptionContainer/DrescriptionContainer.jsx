@@ -14,21 +14,18 @@ export default function DrescriptionContainer(props) {
         <div className='description-container'>
             <div className="main-label">
                 <h1>
-                    Earn some virtual money
+                    Earn some virtual money 💰
                 </h1>
-                <img src="../images/money-bag.png" alt="" />
             </div>
             <div className="food">
-                <p>To buy virtual food</p>
-                <img src="../images/pizza.png" alt="" />
-
+                <p>To buy virtual food 🍕</p>
             </div>
             <div className="wallet">
                 {/* State Component */}
-                <h3>Wallet:${props.state.walletBalance}</h3>
+                <h3>💸 Wallet:${props.state.walletBalance}</h3>
             </div>
-            <h2>
-                Portfolio Value:${totalValue === 0 ? "0.00" : totalValue.toFixed(2)
+            <h2 className='portfolio'>
+                Portfolio Value: ${totalValue === 0 ? "0.00" : totalValue.toFixed(2)
                 }
             </h2>
         </div>

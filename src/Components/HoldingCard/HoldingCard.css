@@ -6,6 +6,7 @@
     flex-direction: column;
     gap: 8px;
     background-color: var(--color-bg);
+    margin: 8px 0px;
 }
 
 .holding-card h3 {
