@@ -8,14 +8,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-top: 20px; */
+    color: var(--color-text);
 }
+
 .food {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 20px;
+    color: var(--color-text-light);
 }
-.food img {
-    height: 100%;
+
+.waller {
+    color: var(--color-text);
+}
+
+.portfoilio {
+    color: var(--color-text);
+    margin-top: 32px;
+    font-size: 30px;
 }

@@ -5,3 +5,15 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+:root {
+  --color-text: black;
+  --color-text-light: rgb(116 116 116);
+  --color-bg: white
+}
+
+.dark {
+  --color-text: whitesmoke;
+  --color-text-light: rgb(116 116 116);
+  --color-bg: #222222
+}

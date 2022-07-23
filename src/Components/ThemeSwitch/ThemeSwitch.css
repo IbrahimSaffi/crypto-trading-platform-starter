@@ -1,0 +1,24 @@
+.theme-switch {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 16px;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; 
+}
+
+.theme-switch:hover {
+    animation: spin 500ms ease-in;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

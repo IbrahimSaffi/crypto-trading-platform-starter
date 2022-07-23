@@ -5,16 +5,15 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background-color: white;
-
+    background-color: var(--color-bg);
 }
 
 .holding-card h3 {
-    color: #464646;
+    color: var(--color-text);
 }
 
 .details {
-    color: #5c5c5c;
+    color: var(--color-text-light);
     font-weight: bold;
 }
 
