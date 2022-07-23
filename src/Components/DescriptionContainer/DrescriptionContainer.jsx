@@ -1,6 +1,15 @@
 import React from 'react'
 import "../DescriptionContainer/DescriptionContainer.css"
-export default function DrescriptionContainer() {
+export default function DrescriptionContainer(props) {
+  //Updating portfolio
+  let totalValue = 0
+    let currPricesObj = {}
+    props.state.coins.forEach(ele=>{
+      currPricesObj[ele.name] =ele.market_data.current_price.usd
+    })
+    for(let key in props.state.holdings){
+      totalValue += props.state.holdings[key].coinsInHolding*currPricesObj[key]
+    }
   return (
     <div className='description-container'>
         <div className="main-label">
@@ -16,10 +25,11 @@ export default function DrescriptionContainer() {
         </div>
          <div className="wallet">
         {/* State Component */}
-            <h3>Wallet:$100</h3>
+            <h3>Wallet:${props.state.walletBalance}</h3>
          </div>
          <h2>
-            Portfolio Value:$50.80
+            Portfolio Value:${totalValue===0?"0.00":totalValue.toFixed(2)
+            }
          </h2>
         </div>
 

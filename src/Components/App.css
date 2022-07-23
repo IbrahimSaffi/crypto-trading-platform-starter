@@ -6,7 +6,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "poppins"
+  font-family: "poppins";
+  z-index: 0;
 }
 
 .main-container {

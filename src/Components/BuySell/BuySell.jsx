@@ -1,46 +1,65 @@
 import React from 'react'
 import "./BuySell.css"
-export default function BuySell() {
-  // let amount = 0
+export default function BuySell(props) {
+  //Maximum coins that can bought
+  let maxCoins = props.state.walletBalance/props.state.currentPrice
+  function handleBuySellClick(){
+       let date = Date().split(" ").slice(2,5)
+            date.unshift(new Date().getMonth()+1)
+            let time = date.pop() 
+            date = date.join("/")
+            props.dispatch({type:"transaction",payload:`${date} ${time}`})
+            console.log(props.state.transactions,props.state.holdings)
+  }
   return (
-    <div className='buy-sell' >
+    <div style={{display:props.state.dialogDisplay}} className='buy-sell' >
         {/* State component */}
         <div className='buy-sell-label' >
-        <h1>Sell Dogecoin</h1>
+        <h1 style={{textTransform:"capitalize"}} >{props.state.transactionType} {props.state.coinType}</h1>
         <button onClick={()=>{
-          // dispatch({type:"brightness"})
+          props.dispatch({type:"brightness-display"})
         }}  className='rem' >X</button>
         </div>
         <div className='sub-container' >
 
-        <h2>Current Price $1234</h2>
+        <h2>Current Price ${props.state.currentPrice}</h2>
         <div className='input-capacity' >
             <input onChange={((e)=>{
-              // amount = e.target.value
-
+              props.dispatch({type : "input-value-record",payload:e.target.value})
             }
-              )} type="number" />
-            <h2>Max :50</h2>
+              )} 
+              onKeyDown={(e)=>{
+                if(e.key==="Enter"){
+                  if(props.state.walletBalance/props.state.currentPrice){
+                    if(e.target.value>0&&e.target.value<maxCoins){
+                      handleBuySellClick()
+                    }
+                  }
+                }
+               }}
+              type="number"  max={maxCoins}/>
+            <h2>Max :{maxCoins}</h2>
         </div>
         <p>You will recieve $10</p>
         <div className='buy-input' >
         <input onClick={()=>{
-          // dipatch({type:"transactionType",payload:"buy"})
-          }} type="radio" name="transaction" id="" />
+          props.dispatch({type:"transaction-type",payload:"buy"})
+          }} type="radio" name="transaction" id="" checked={props.state.transactionType==="buy"} />
          <h2>Buy</h2>
         </div>
         <div className='sell-input' >
         <input onClick={()=>{
-        // dipatch({type:"transactionType",payload:"sell"})
+        props.dispatch({type:"transaction-type",payload:"sell"})
         }
       }
-         type="radio" name="transaction" id="" />
+         type="radio" name="transaction" id="" checked={props.state.transactionType==="sell"} />
         <h2>Sell</h2>
         </div>
-        <button onClick={()=>{
-          // dispatch({type:"transactionAmount",payload:amount})
+        <button style={{textTransform:"capitalize"}} onClick={()=>{
+          if(props.state.inputValue>0&&props.state.inputValue<maxCoins)
+          handleBuySellClick()
         }}  className='buy-btn' >
-          Buy
+         {props.state.transactionType}
         </button>
         </div>
     </div>
