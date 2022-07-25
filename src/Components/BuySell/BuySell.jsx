@@ -26,6 +26,7 @@ export default function BuySell(props) {
         <div className='input-capacity' >
             <input onChange={((e)=>{
               props.dispatch({type : "input-value-record",payload:e.target.value})
+              props.dispatch({type:"display-error",payload:"option-changed"})
             }
               )} 
               onKeyDown={(e)=>{

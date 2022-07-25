@@ -78,7 +78,7 @@ function reducer(state, action) {
             }
             tempTransactionArr.push(newTransaction)
             //To update holdings
-            let tempHoldingObject = { ...state.holdings }
+            let tempHoldingObject = JSON.parse(JSON.stringify(state.holdings)) 
             if (!tempHoldingObject.hasOwnProperty(`${currency}`)) {
                 tempHoldingObject[`${currency}`] = {
                     name: currency,
@@ -92,14 +92,14 @@ function reducer(state, action) {
                 if (typeOfTransaction === "buy") {
                     //To update wallet
                     tempWallet = tempWallet-dollarsToBePaid
-                    tempDollarPaid = tempHoldingObject[`${currency}`].dollarsPaid + dollarsToBePaid
-                    tempCoinInHolding = tempHoldingObject[`${currency}`].coinsInHolding + amountOfCoins
+                    tempDollarPaid = state.holdings[`${currency}`].dollarsPaid + dollarsToBePaid
+                    tempCoinInHolding = state.holdings[`${currency}`].coinsInHolding + amountOfCoins
                 }
                 else {
                     //TO update wallet
                     tempWallet = tempWallet+dollarsToBePaid
-                    tempDollarPaid = tempHoldingObject[`${currency}`].dollarsPaid - dollarsToBePaid
-                    tempCoinInHolding = tempHoldingObject[`${currency}`].coinsInHolding - amountOfCoins
+                    tempDollarPaid = state.holdings[`${currency}`].dollarsPaid - dollarsToBePaid
+                    tempCoinInHolding = state.holdings[`${currency}`].coinsInHolding - amountOfCoins
                 }
                 console.log(tempCoinInHolding,amountOfCoins)
                 //Bug is here. In console.log above tempCoinsInHolding shows correct amount but when I re-assign it it changes in object
@@ -196,7 +196,7 @@ function App() {
                                 {
                                     state.transactions.length === 0
                                     ? <p>No transactions yet...</p>
-                                    : <div className="holdings-list">
+                                    : <div style={state.transactions.length>3?{overflowY:"scroll"}:{overflowY:'hidden'} }className="holdings-list">
                                         {state.transactions.map(ele=>{
                                           return  <TransactionCard transactionData={ele} />
 

@@ -19,12 +19,14 @@
   justify-content: flex-start;
   gap: 32px;
   margin-top: 10vh;
+  overflow: hidden;
 }
 
 .holdings-transactions {
   display: flex;
   width: 1000px;
   gap: 32px;
+  height: 55%;
 }
 
 .holdings {
@@ -44,6 +46,7 @@
   flex-direction: column;
   flex: 1;
   font-family: "Poppins";
+  /* min-height: 65%; */
 }
 
 .transactions h2 {

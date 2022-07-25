@@ -14,7 +14,9 @@
 .theme-switch:hover {
     animation: spin 500ms ease-in;
 }
-
+.dark,.light {
+    height: 100%;
+}
 @keyframes spin {
     0% {
         transform: rotate(0deg);
