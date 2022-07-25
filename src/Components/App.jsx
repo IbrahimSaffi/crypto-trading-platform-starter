@@ -1,6 +1,6 @@
 import './App.css';
 import DrescriptionContainer from './DescriptionContainer/DrescriptionContainer';
-import CoinsContainer from './CoinsContainer/CoinsContainer';
+import CurrencyContainer from './CurrencyContainer/CurrencyContainer';
 import BuySell from './BuySell/BuySell';
 import HoldingCard from './HoldingCard/HoldingCard';
 import TransactionCard from './TransactionCard/TransactionCard';
@@ -20,9 +20,10 @@ const ACTION = {
     TOGGLE_THEME: "toggle-theme",
     CHANGE_BRIGHTNESS: "brightness-display",
     TRANSACTION_TYPE: "transaction-type",
-    COIN_TYPE: "coin-type",
+    CURRENCY_TYPE: "currency-type",
     INPUT_VALUE: "input-value-record",
     TRANSACTION: "transaction",
+    DISPLAY_ERROR:"display-error"
 }
 
 function reducer(state, action) {
@@ -53,22 +54,23 @@ function reducer(state, action) {
                 newTransactionType = "sell"
             }
             return { ...state, transactionType: newTransactionType }
-        case ACTION.COIN_TYPE:
-            return { ...state, coinType: action.payload.name, currentPrice: action.payload.price }
+        case ACTION.CURRENCY_TYPE:
+      return { ...state, currencyType: action.payload.name, currentPrice: action.payload.price }
         case ACTION.INPUT_VALUE:
             return { ...state, inputValue: action.payload }
         case ACTION.TRANSACTION:
             let currDateAndTime = action.payload
-            let coinToBeBought = state.coinType
-            let amountOfCoinsToBeBought = Number(state.inputValue)
+            let currency = state.currencyType
+            let amountOfCoins = Number(state.inputValue)
             let priceAtTransactionTime = state.currentPrice
             let typeOfTransaction = state.transactionType
-            let dollarsToBePaid = amountOfCoinsToBeBought * priceAtTransactionTime
+            let dollarsToBePaid = amountOfCoins * priceAtTransactionTime
+            let tempWallet = state.walletBalance
             //To update transactions
             let tempTransactionArr = state.transactions.slice()
             let newTransaction = {
-                name: coinToBeBought,
-                coinsAmount: amountOfCoinsToBeBought,
+                name: currency,
+                coinsAmount: amountOfCoins,
                 price: priceAtTransactionTime,
                 type: typeOfTransaction,
                 dollarsAmount: dollarsToBePaid,
@@ -77,10 +79,10 @@ function reducer(state, action) {
             tempTransactionArr.push(newTransaction)
             //To update holdings
             let tempHoldingObject = { ...state.holdings }
-            if (!tempHoldingObject.hasOwnProperty(`${coinToBeBought}`)) {
-                tempHoldingObject[`${coinToBeBought}`] = {
-                    name: coinToBeBought,
-                    coinsInHolding: amountOfCoinsToBeBought,
+            if (!tempHoldingObject.hasOwnProperty(`${currency}`)) {
+                tempHoldingObject[`${currency}`] = {
+                    name: currency,
+                    coinsInHolding: amountOfCoins,
                     dollarsPaid: dollarsToBePaid,
                 }
             }
@@ -88,17 +90,32 @@ function reducer(state, action) {
                 let tempDollarPaid;
                 let tempCoinInHolding;
                 if (typeOfTransaction === "buy") {
-                    tempDollarPaid = tempHoldingObject[`${coinToBeBought}`].dollarsPaid + dollarsToBePaid
-                    tempCoinInHolding = tempHoldingObject[`${coinToBeBought}`].coinsInHolding + amountOfCoinsToBeBought
+                    //To update wallet
+                    tempWallet = tempWallet-dollarsToBePaid
+                    tempDollarPaid = tempHoldingObject[`${currency}`].dollarsPaid + dollarsToBePaid
+                    tempCoinInHolding = tempHoldingObject[`${currency}`].coinsInHolding + amountOfCoins
                 }
                 else {
-                    tempDollarPaid = tempHoldingObject[`${coinToBeBought}`].dollarsPaid - dollarsToBePaid
-                    tempCoinInHolding = tempHoldingObject[`${coinToBeBought}`].coinsInHolding - amountOfCoinsToBeBought
+                    //TO update wallet
+                    tempWallet = tempWallet+dollarsToBePaid
+                    tempDollarPaid = tempHoldingObject[`${currency}`].dollarsPaid - dollarsToBePaid
+                    tempCoinInHolding = tempHoldingObject[`${currency}`].coinsInHolding - amountOfCoins
                 }
-                tempHoldingObject[`${coinToBeBought}`].dollarsPaid = tempDollarPaid
-                tempHoldingObject[`${coinToBeBought}`].coinsInHolding = tempCoinInHolding
+                console.log(tempCoinInHolding,amountOfCoins)
+                //Bug is here. In console.log above tempCoinsInHolding shows correct amount but when I re-assign it it changes in object
+                tempHoldingObject[`${currency}`].dollarsPaid = tempDollarPaid
+                tempHoldingObject[`${currency}`].coinsInHolding = tempCoinInHolding
             }
-            return { ...state, transactions: tempTransactionArr, holdings: tempHoldingObject }
+            return { ...state, transactions: tempTransactionArr, holdings: tempHoldingObject,walletBalance:tempWallet }
+            case ACTION.DISPLAY_ERROR:
+                let tempDisplayError;
+                if(action.payload==="option-changed"){
+                    tempDisplayError="none"
+                }
+                else {
+                    tempDisplayError="block"
+                }
+                return { ...state, displayError:tempDisplayError}
         default:
             return state
     }
@@ -114,9 +131,10 @@ const initialState = {
     dialogBrightness: "brightness(100%)",
     dialogDisplay: "none",
     transactionType: "buy",
-    coinType: null,
+    currencyType: null,
     currentPrice: null,
-    inputValue: null
+    inputValue: null,
+    displayError:"none"
 }
 
 function App() {
@@ -154,7 +172,7 @@ function App() {
                     state.isFetching
                     ? <p className="fetching">Fetching...</p>
                     : <>
-                        <CoinsContainer dispatch={dispatch} coinList={state.coins}/>
+                        <CurrencyContainer dispatch={dispatch} coinList={state.coins}/>
 
                         <div className='holdings-transactions'>
                             <div className="holdings">

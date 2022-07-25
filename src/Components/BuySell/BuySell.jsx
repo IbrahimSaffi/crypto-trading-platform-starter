@@ -15,7 +15,7 @@ export default function BuySell(props) {
     <div style={{display:props.state.dialogDisplay}} className='buy-sell' >
         {/* State component */}
         <div className='buy-sell-label' >
-        <h1 style={{textTransform:"capitalize"}} >{props.state.transactionType} {props.state.coinType}</h1>
+        <h1 style={{textTransform:"capitalize"}} >{props.state.transactionType} {props.state.currencyType}</h1>
         <button onClick={()=>{
           props.dispatch({type:"brightness-display"})
         }}  className='rem' >X</button>
@@ -34,30 +34,43 @@ export default function BuySell(props) {
                     if(e.target.value>0&&e.target.value<maxCoins){
                       handleBuySellClick()
                     }
+                    else {
+                      props.dispatch({type:"display-error"})
+                    }
                   }
                 }
                }}
               type="number"  max={maxCoins}/>
-            <h2>Max :{maxCoins}</h2>
+            <h2>Max :{props.state.transactionType==="buy"?
+              maxCoins:(props.state.holdings.hasOwnProperty(props.state.currencyType)?props.state.holdings[props.state.currencyType].coinsInHolding:0)}</h2>
         </div>
-        <p>You will recieve $10</p>
+        <p>You will {props.state.transactionType==="buy"?"charged":"recieve"}  ${props.state.currentPrice*props.state.inputValue}</p>
+        <p style={{color:"red" , display:props.state.displayError}} className='Error' >Not enough {props.state.transactionType==="buy"?"balance":"holdings"}</p>
         <div className='buy-input' >
         <input onClick={()=>{
           props.dispatch({type:"transaction-type",payload:"buy"})
+          //To hide error
+          props.dispatch({type:"display-error",payload:"option-changed" })
           }} type="radio" name="transaction" id="" checked={props.state.transactionType==="buy"} />
          <h2>Buy</h2>
         </div>
         <div className='sell-input' >
         <input onClick={()=>{
         props.dispatch({type:"transaction-type",payload:"sell"})
+        //To hide error
+        props.dispatch({type:"display-error",payload:"option-changed"})
         }
       }
          type="radio" name="transaction" id="" checked={props.state.transactionType==="sell"} />
         <h2>Sell</h2>
         </div>
         <button style={{textTransform:"capitalize"}} onClick={()=>{
-          if(props.state.inputValue>0&&props.state.inputValue<maxCoins)
-          handleBuySellClick()
+          if(props.state.inputValue>0&&props.state.inputValue<maxCoins){
+            handleBuySellClick()
+          }
+          else {
+            props.dispatch({type:"display-error"})
+          }
         }}  className='buy-btn' >
          {props.state.transactionType}
         </button>

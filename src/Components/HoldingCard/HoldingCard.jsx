@@ -15,6 +15,6 @@ export default function HoldingCard(props){
     return <div className="holding-card">
         <h3>{currCardData.name}: {currCardData.coinsInHolding}</h3>
         <p className="details">Total Paid: ${currCardData.dollarsPaid}, Current Value: ${currCoinPrice}</p>
-        <p className="change up">P/L: ${currCoinPrice-currCardData.dollarsPaid} </p>
+        <p className={`change ${currCoinPrice-currCardData.dollarsPaid>1?"up":"down"}`}>P/L: ${currCoinPrice-currCardData.dollarsPaid} </p>
     </div>
 }

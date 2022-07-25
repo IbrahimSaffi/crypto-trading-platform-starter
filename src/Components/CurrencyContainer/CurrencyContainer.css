@@ -1,4 +1,4 @@
-.coins-container {
+.currency-container {
     display: flex;
     width: 100%;
     flex-direction: row;
@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.coin-card {
+.currency-card {
     display: flex;
     flex: 1;
     padding: 16px;
@@ -18,17 +18,17 @@
     gap: 8px;
 }
 
-.coin-card h2, h3 {
+.currency-card h2, h3 {
     color: var(--color-text);
 }
 
-.coin-card-text {
+.currency-card-text {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.coin-card img {
+.currency-card img {
     width: 80px;
     object-fit: contain;
 }

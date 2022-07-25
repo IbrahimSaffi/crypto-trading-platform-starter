@@ -18,6 +18,7 @@
   width: 1000px;
   justify-content: flex-start;
   gap: 32px;
+  margin-top: 10vh;
 }
 
 .holdings-transactions {

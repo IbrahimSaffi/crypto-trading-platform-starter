@@ -9,6 +9,8 @@
     min-width: 30%;
     border-radius: 10px;
     z-index: 1;
+    font-family: "Poppins";
+    font-size: 15px;
 }
 
 .buy-sell-label {
@@ -22,6 +24,9 @@
     align-items: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px ;
+    padding-top:10px;
+    padding-bottom:10px;
+    font-size: smaller;
 }
 .sub-container {
     padding-left: 20px;
@@ -48,6 +53,8 @@ input {
     background-color: gray;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-family: "Poppins";
+    font-size: 15px;
 }
 .rem {
     background-color: transparent;
