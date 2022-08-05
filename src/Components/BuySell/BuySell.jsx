@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import "./BuySell.css"
 export default function BuySell(props) {
   //Maximum coins that can bought
   let maxCoins = props.state.walletBalance/props.state.currentPrice
+  let inputVal = useRef(null)
   function handleBuySellClick(){
        let date = Date().split(" ").slice(2,5)
             date.unshift(new Date().getMonth()+1)
             let time = date.pop() 
             date = date.join("/")
             props.dispatch({type:"transaction",payload:`${date} ${time}`})
+            props.dispatch({type:"update-wallet"})
             console.log(props.state.transactions,props.state.holdings)
   }
   return (
@@ -24,7 +26,9 @@ export default function BuySell(props) {
 
         <h2>Current Price ${props.state.currentPrice}</h2>
         <div className='input-capacity' >
-            <input onChange={((e)=>{
+            <input
+             ref={inputVal} 
+            onChange={((e)=>{
               props.dispatch({type : "input-value-record",payload:e.target.value})
               props.dispatch({type:"display-error",payload:"option-changed"})
             }
@@ -32,7 +36,7 @@ export default function BuySell(props) {
               onKeyDown={(e)=>{
                 if(e.key==="Enter"){
                   if(props.state.walletBalance/props.state.currentPrice){
-                    if(e.target.value>0&&e.target.value<maxCoins){
+                    if(e.target.value>0&&e.target.value<=maxCoins){
                       handleBuySellClick()
                     }
                     else {
@@ -42,7 +46,12 @@ export default function BuySell(props) {
                 }
                }}
               type="number"  max={maxCoins}/>
-            <h2>Max :{props.state.transactionType==="buy"?
+            <h2 onClick={()=>{
+              props.dispatch({type:"update-input",payload :props.state.transactionType==="buy"?
+              maxCoins:(props.state.holdings.hasOwnProperty(props.state.currencyType)?props.state.holdings[props.state.currencyType].coinsInHolding:0)})
+              inputVal.current.value = props.state.transactionType==="buy"?
+              maxCoins:(props.state.holdings.hasOwnProperty(props.state.currencyType)?props.state.holdings[props.state.currencyType].coinsInHolding:0)
+            }}>Max :{props.state.transactionType==="buy"?
               maxCoins:(props.state.holdings.hasOwnProperty(props.state.currencyType)?props.state.holdings[props.state.currencyType].coinsInHolding:0)}</h2>
         </div>
         <p>You will {props.state.transactionType==="buy"?"charged":"recieve"}  ${props.state.currentPrice*props.state.inputValue}</p>
@@ -66,7 +75,9 @@ export default function BuySell(props) {
         <h2>Sell</h2>
         </div>
         <button style={{textTransform:"capitalize"}} onClick={()=>{
-          if(props.state.inputValue>0&&props.state.inputValue<maxCoins){
+          if(props.state.inputValue>0&&props.state.inputValue<=(props.state.transactionType==="buy"?
+          maxCoins:(props.state.holdings.hasOwnProperty(props.state.currencyType)?props.state.holdings[props.state.currencyType].coinsInHolding:0))){
+            console.log("bughere")
             handleBuySellClick()
           }
           else {

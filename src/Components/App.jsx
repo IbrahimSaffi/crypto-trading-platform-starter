@@ -23,7 +23,9 @@ const ACTION = {
     CURRENCY_TYPE: "currency-type",
     INPUT_VALUE: "input-value-record",
     TRANSACTION: "transaction",
-    DISPLAY_ERROR:"display-error"
+    DISPLAY_ERROR:"display-error",
+    INSERT_MAX_INPUT:"update-input",
+    UPDATE_WALLET:"update-wallet"
 }
 
 function reducer(state, action) {
@@ -65,7 +67,6 @@ function reducer(state, action) {
             let priceAtTransactionTime = state.currentPrice
             let typeOfTransaction = state.transactionType
             let dollarsToBePaid = amountOfCoins * priceAtTransactionTime
-            let tempWallet = state.walletBalance
             //To update transactions
             let tempTransactionArr = state.transactions.slice()
             let newTransaction = {
@@ -90,23 +91,17 @@ function reducer(state, action) {
                 let tempDollarPaid;
                 let tempCoinInHolding;
                 if (typeOfTransaction === "buy") {
-                    //To update wallet
-                    tempWallet = tempWallet-dollarsToBePaid
                     tempDollarPaid = state.holdings[`${currency}`].dollarsPaid + dollarsToBePaid
                     tempCoinInHolding = state.holdings[`${currency}`].coinsInHolding + amountOfCoins
                 }
                 else {
-                    //TO update wallet
-                    tempWallet = tempWallet+dollarsToBePaid
                     tempDollarPaid = state.holdings[`${currency}`].dollarsPaid - dollarsToBePaid
                     tempCoinInHolding = state.holdings[`${currency}`].coinsInHolding - amountOfCoins
                 }
-                console.log(tempCoinInHolding,amountOfCoins)
-                //Bug is here. In console.log above tempCoinsInHolding shows correct amount but when I re-assign it it changes in object
                 tempHoldingObject[`${currency}`].dollarsPaid = tempDollarPaid
                 tempHoldingObject[`${currency}`].coinsInHolding = tempCoinInHolding
             }
-            return { ...state, transactions: tempTransactionArr, holdings: tempHoldingObject,walletBalance:tempWallet }
+            return { ...state, transactions: tempTransactionArr, holdings: tempHoldingObject }
             case ACTION.DISPLAY_ERROR:
                 let tempDisplayError;
                 if(action.payload==="option-changed"){
@@ -116,7 +111,21 @@ function reducer(state, action) {
                     tempDisplayError="block"
                 }
                 return { ...state, displayError:tempDisplayError}
-        default:
+                case ACTION.INSERT_MAX_INPUT:
+                let tempMax = action.payload
+                return { ...state, inputValue:tempMax}
+                case ACTION.UPDATE_WALLET:
+                    let tempWallet = state.walletBalance
+                    
+                    if (state.transactionType === "buy") {
+                        //To update wallet
+                        tempWallet = tempWallet-(Number(state.inputValue)*state.currentPrice)
+                    }
+                    else {
+                        tempWallet = tempWallet+(Number(state.inputValue)*state.currentPrice)
+                    };
+                    return { ...state, walletBalance:tempWallet}
+             default:
             return state
     }
 }
